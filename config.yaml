@@ -1,0 +1,140 @@
+# Application Configuration
+app:
+  name: "Search Engine"
+  version: "1.0.0"
+  author: "Student"
+  description: "Поисковая система для лабораторных работ"
+
+# MongoDB Configuration
+mongodb:
+  host: ${MONGO_HOST:localhost}
+  port: ${MONGO_PORT:27017}
+  database: ${MONGO_DATABASE:search_engine_db}
+  username: ${MONGO_USERNAME}
+  password: ${MONGO_PASSWORD}
+  collections:
+    pages: ${MONGO_COLLECTION_PAGES:pages}
+    index_metadata: ${MONGO_COLLECTION_INDEX:index_metadata}
+    logs: logs
+
+# Crawler Configuration
+crawler:
+  user_agent: ${CRAWLER_USER_AGENT:"SearchEngineBot/1.0"}
+  delay: ${CRAWLER_DELAY:1.0}  # seconds between requests
+  max_pages: ${CRAWLER_MAX_PAGES:30000}
+  max_depth: ${CRAWLER_MAX_DEPTH:3}
+  timeout: ${CRAWLER_TIMEOUT:10}
+  retry_attempts: 3
+  valid_content_types:
+    - "text/html"
+    - "application/json"
+    - "text/plain"
+  ignore_extensions:
+    - ".pdf"
+    - ".doc"
+    - ".docx"
+    - ".ppt"
+    - ".pptx"
+    - ".zip"
+    - ".rar"
+    - ".tar"
+    - ".gz"
+
+# Wikipedia Configuration (default source)
+wikipedia:
+  api_url: ${WIKIPEDIA_API_URL:https://ru.wikipedia.org/w/api.php}
+  language: "ru"
+  category: ${WIKIPEDIA_CATEGORY:Наука}
+  namespace: 0
+  include_subcategories: true
+  min_article_length: 1000  # characters
+
+# Data Processing
+processing:
+  encoding: "utf-8"
+  min_token_length: 2
+  max_token_length: 50
+  remove_numbers: false
+  remove_punctuation: true
+  case_folding: true  # convert to lowercase
+  stopwords_path: "data/stopwords/ru.txt"
+
+# Tokenization
+tokenizer:
+  language: "russian"
+  split_by_sentences: false
+  preserve_urls: false
+  preserve_emails: false
+  preserve_hashtags: false
+
+# Stemming
+stemmer:
+  algorithm: "porter"  # porter, snowball
+  language: "russian"
+
+# Index Configuration
+index:
+  format_version: 1
+  compression: false
+  use_zones: false
+  zones:
+    - "title"
+    - "body"
+    - "headers"
+  memory_limit_mb: 512
+  batch_size: 1000
+
+# Boolean Search
+boolean_search:
+  operators:
+    and: "&&"
+    or: "||"
+    not: "!"
+  default_operator: "and"
+  allow_parentheses: true
+  max_query_length: 1000
+  max_results: 1000
+
+# Paths Configuration
+paths:
+  base_dir: "."
+  data:
+    raw: ${DATA_RAW_PATH:./data/raw}
+    processed: ${DATA_PROCESSED_PATH:./data/processed}
+    indexes: ${DATA_INDEXES_PATH:./data/indexes}
+    logs: ${DATA_LOGS_PATH:./data/logs}
+    stopwords: "data/stopwords"
+  reports: "./reports"
+  scripts: "./scripts"
+
+# Logging Configuration
+logging:
+  level: ${LOG_LEVEL:INFO}
+  format: ${LOG_FORMAT:"%(asctime)s - %(name)s - %(levelname)s - %(message)s"}
+  file:
+    enabled: true
+    path: "data/logs/search_engine.log"
+    max_size_mb: 100
+    backup_count: 5
+  console:
+    enabled: true
+    colors: true
+
+# Performance
+performance:
+  threads: 4
+  use_mmap: true
+  cache_size_mb: 256
+  enable_profiling: false
+
+# Testing
+testing:
+  test_corpus_size: 1000
+  test_queries_path: "data/test/queries.txt"
+  relevance_judgments_path: "data/test/relevance.txt"
+  metrics:
+    - "precision"
+    - "recall"
+    - "f1"
+    - "dcg"
+    - "ndcg"
