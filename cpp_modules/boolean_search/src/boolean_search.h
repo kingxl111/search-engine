@@ -4,7 +4,7 @@
 #include "query_parser.h"
 #include "query_evaluator.h"
 #include "../../boolean_index/src/inverted_index.h"
-#include "../../data_structures/vector.h"
+#include "../../data_structures/ds_vector.h"
 #include <memory>
 #include <chrono>
 
@@ -83,6 +83,9 @@ public:
         size_t complexity;
         bool is_valid;
         ds::String parse_tree;
+        ds::String error_message;  // Сообщение об ошибке
+        
+        QueryInfo() : complexity(0), is_valid(false) {}
     };
     
     QueryInfo analyze_query(const ds::String& query) const;

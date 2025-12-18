@@ -3,7 +3,7 @@
 
 #include "query_parser.h"
 #include "../../boolean_index/src/inverted_index.h"
-#include "../../data_structures/bit_vector.h"
+#include "../../data_structures/ds_bit_vector.h"
 #include <memory>
 #include <functional>
 
@@ -16,6 +16,7 @@ struct DocumentResult {
     size_t matches;         // Количество совпадений
     ds::Vector<size_t> positions; // Позиции совпадений (для выделения сниппетов)
     
+    DocumentResult() : doc_id(0), score(0.0), matches(0) {}
     DocumentResult(uint32_t id) : doc_id(id), score(0.0), matches(0) {}
     
     bool operator<(const DocumentResult& other) const {

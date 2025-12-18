@@ -1,10 +1,10 @@
 #ifndef INVERTED_INDEX_H
 #define INVERTED_INDEX_H
 
-#include "../../data_structures/vector.h"
-#include "../../data_structures/hash_table.h"
-#include "../../data_structures/bit_vector.h"
-#include "../../data_structures/string.h"
+#include "../../data_structures/ds_vector.h"
+#include "../../data_structures/ds_hash_table.h"
+#include "../../data_structures/ds_bit_vector.h"
+#include "../../data_structures/ds_string.h"
 #include "../../tokenizer/src/tokenizer.h"
 
 #include <cstdint>

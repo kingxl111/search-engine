@@ -23,7 +23,7 @@ add_library(boolean_index ${SOURCES} ${HEADERS})
 # Настройки компилятора
 target_include_directories(boolean_index PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../data_stuctures
+    ${CMAKE_CURRENT_SOURCE_DIR}/../data_structures
     ${CMAKE_CURRENT_SOURCE_DIR}/../tokenizer/src
 )
 

@@ -1,8 +1,9 @@
 #ifndef QUERY_PARSER_H
 #define QUERY_PARSER_H
 
-#include "../../data_structures/vector.h"
-#include "../../data_structures/string.h"
+#include "../../data_structures/ds_vector.h"
+#include "../../data_structures/ds_string.h"
+#include "../../data_structures/ds_hash_table.h"
 #include <cstddef>
 #include <stdexcept>
 

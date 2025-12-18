@@ -1,7 +1,7 @@
-#ifndef STRING_H
-#define STRING_H
+#ifndef DS_STRING_H
+#define DS_STRING_H
 
-#include "vector.h"
+#include "ds_vector.h"
 #include <cstddef>
 #include <cstdint>
 #include <utility>
@@ -398,11 +398,9 @@ public:
             char c = result[i];
             if (c >= 'A' && c <= 'Z') {
                 result[i] = c + ('a' - 'A');
-            } else if (c >= 'А' && c <= 'Я') { // Русские заглавные в Windows-1251
-                result[i] = c + ('а' - 'А');
-            } else if (c == 'Ё') {
-                result[i] = 'ё';
             }
+            // Поддержка UTF-8 русских букв требует более сложной логики
+            // и обрабатывается на уровне токенизатора
         }
         return result;
     }
@@ -413,11 +411,8 @@ public:
             char c = result[i];
             if (c >= 'a' && c <= 'z') {
                 result[i] = c - ('a' - 'A');
-            } else if (c >= 'а' && c <= 'я') { // Русские строчные в Windows-1251
-                result[i] = c - ('а' - 'А');
-            } else if (c == 'ё') {
-                result[i] = 'Ё';
             }
+            // Поддержка UTF-8 русских букв требует более сложной логики
         }
         return result;
     }
@@ -434,9 +429,8 @@ public:
     bool is_alpha() const {
         if (empty()) return false;
         for (char c : *this) {
-            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
-                  (c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я') ||
-                  c == 'ё' || c == 'Ё')) {
+            unsigned char uc = static_cast<unsigned char>(c);
+            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || uc >= 128)) {
                 return false;
             }
         }
@@ -446,10 +440,9 @@ public:
     bool is_alnum() const {
         if (empty()) return false;
         for (char c : *this) {
+            unsigned char uc = static_cast<unsigned char>(c);
             if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
-                  (c >= '0' && c <= '9') ||
-                  (c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я') ||
-                  c == 'ё' || c == 'Ё')) {
+                  (c >= '0' && c <= '9') || uc >= 128)) {
                 return false;
             }
         }
@@ -586,18 +579,23 @@ inline String operator+(char lhs, const String& rhs) {
     return result;
 }
 
-// Хеш-функция для String (для использования в HashTable)
-template<>
-struct std::hash<ds::String> {
-    size_t operator()(const ds::String& str) const {
-        size_t hash = 5381;
-        for (char c : str) {
-            hash = ((hash << 5) + hash) + static_cast<unsigned char>(c);
-        }
-        return hash;
-    }
-};
-
 } // namespace ds
 
-#endif // STRING_H
+// Хеш-функция для String (для использования в HashTable) - вне namespace
+#ifndef DS_STRING_HASH_DEFINED
+#define DS_STRING_HASH_DEFINED
+namespace std {
+    template<>
+    struct hash<ds::String> {
+        size_t operator()(const ds::String& str) const {
+            size_t hash_value = 5381;
+            for (char c : str) {
+                hash_value = ((hash_value << 5) + hash_value) + static_cast<unsigned char>(c);
+            }
+            return hash_value;
+        }
+    };
+}  // namespace std
+#endif
+
+#endif // DS_STRING_H

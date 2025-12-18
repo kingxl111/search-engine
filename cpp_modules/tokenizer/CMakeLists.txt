@@ -19,7 +19,7 @@ add_library(tokenizer ${SOURCES} ${HEADERS})
 # Настройки компилятора
 target_include_directories(tokenizer PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../data_stuctures
+    ${CMAKE_CURRENT_SOURCE_DIR}/../data_structures
 )
 
 # Флаги компиляции

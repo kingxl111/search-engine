@@ -1,0 +1,9 @@
+=== Index Build Statistics ===
+
+Documents processed: 100
+Documents skipped: 0
+Total tokens: 175825
+Unique tokens: 44440
+Build time: 344 ms
+Average speed: 290.698 docs/sec
+Token processing speed: 511119 tokens/sec

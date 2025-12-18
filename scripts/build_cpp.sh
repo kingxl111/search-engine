@@ -25,11 +25,14 @@ cd "$BUILD_DIR"
 
 # Генерируем Makefile с помощью CMake
 echo "Generating build files..."
-cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake ../cpp_modules -DCMAKE_BUILD_TYPE=Release
 
 # Определяем количество ядер для параллельной сборки
-NUM_CORES=$(nproc)
-if [ -z "$NUM_CORES" ]; then
+if command -v nproc &> /dev/null; then
+    NUM_CORES=$(nproc)
+elif command -v sysctl &> /dev/null; then
+    NUM_CORES=$(sysctl -n hw.ncpu)  # Mac OS
+else
     NUM_CORES=4
 fi
 

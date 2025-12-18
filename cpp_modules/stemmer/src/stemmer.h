@@ -1,8 +1,8 @@
 #ifndef STEMMER_H
 #define STEMMER_H
 
-#include "../../data_structures/string.h"
-#include "../../data_structures/vector.h"
+#include "../../data_structures/ds_string.h"
+#include "../../data_structures/ds_vector.h"
 
 namespace search {
 

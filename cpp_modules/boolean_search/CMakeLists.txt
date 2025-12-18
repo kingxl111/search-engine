@@ -29,7 +29,7 @@ add_library(boolean_search ${SOURCES} ${HEADERS})
 # Настройки компилятора
 target_include_directories(boolean_search PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../data_stuctures
+    ${CMAKE_CURRENT_SOURCE_DIR}/../data_structures
     ${CMAKE_CURRENT_SOURCE_DIR}/../tokenizer/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../boolean_index/src
 )

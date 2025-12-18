@@ -1,7 +1,7 @@
-#ifndef HASH_TABLE_H
-#define HASH_TABLE_H
+#ifndef DS_HASH_TABLE_H
+#define DS_HASH_TABLE_H
 
-#include "vector.h"
+#include "ds_vector.h"
 #include <functional>
 #include <utility>
 #include <string>
@@ -373,18 +373,6 @@ template<typename K, typename V, typename Hash, typename KeyEqual>
 const size_t HashTable<K, V, Hash, KeyEqual>::PRIMES_COUNT = 
     sizeof(PRIMES) / sizeof(PRIMES[0]);
 
-// Специализация для строк
-template<>
-struct std::hash<std::string> {
-    size_t operator()(const std::string& str) const {
-        size_t hash = 5381;
-        for (char c : str) {
-            hash = ((hash << 5) + hash) + static_cast<unsigned char>(c);
-        }
-        return hash;
-    }
-};
-
 } // namespace ds
 
-#endif // HASH_TABLE_H
+#endif // DS_HASH_TABLE_H

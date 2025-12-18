@@ -19,8 +19,9 @@ InvertedIndex::InvertedIndex(std::unique_ptr<Tokenizer> tokenizer)
 // Добавление документа
 uint32_t InvertedIndex::add_document(const Document& document) {
     // Проверяем, не добавлен ли уже документ с таким URL
-    if (url_to_doc_id_.find(document.url) != nullptr) {
-        return url_to_doc_id_.find(document.url)->doc_id;
+    auto* existing_id = url_to_doc_id_.find(document.url);
+    if (existing_id != nullptr) {
+        return *existing_id;
     }
     
     // Создаем копию документа с правильным ID
@@ -67,9 +68,11 @@ uint32_t InvertedIndex::index_document(const Document& document) {
     }
     
     // Добавляем термины в инвертированный индекс
-    for (const auto& term_entry : term_positions) {
-        const ds::String& term = term_entry.key;
-        const ds::Vector<uint32_t>& positions = term_entry.value;
+    auto term_keys = term_positions.keys();
+    for (const auto& term : term_keys) {
+        const ds::Vector<uint32_t>* positions_ptr = term_positions.find(term);
+        if (!positions_ptr) continue;
+        const ds::Vector<uint32_t>& positions = *positions_ptr;
         
         // Ищем или создаем список постингов для термина
         ds::Vector<Posting>* postings = index_.find(term);
@@ -161,8 +164,12 @@ void InvertedIndex::update_stats() {
     stats_.total_postings = 0;
     size_t total_doc_length = 0;
     
-    for (const auto& term_entry : index_) {
-        stats_.total_postings += term_entry.value.size();
+    auto terms = index_.keys();
+    for (const auto& term : terms) {
+        const auto* postings = index_.find(term);
+        if (postings) {
+            stats_.total_postings += postings->size();
+        }
     }
     
     // Вычисляем среднюю длину документа
@@ -181,11 +188,14 @@ void InvertedIndex::update_stats() {
     size_t max_freq = 0;
     ds::String most_frequent;
     
-    for (const auto& term_entry : index_) {
-        size_t freq = term_entry.value.size();
-        if (freq > max_freq) {
-            max_freq = freq;
-            most_frequent = term_entry.key;
+    for (const auto& term : terms) {
+        const auto* postings = index_.find(term);
+        if (postings) {
+            size_t freq = postings->size();
+            if (freq > max_freq) {
+                max_freq = freq;
+                most_frequent = term;
+            }
         }
     }
     
@@ -504,14 +514,18 @@ bool InvertedIndex::validate() const {
     }
     
     // Проверяем постинги
-    for (const auto& term_entry : index_) {
-        for (const auto& posting : term_entry.value) {
-            if (posting.doc_id >= documents_.size()) {
-                return false;
-            }
-            
-            if (posting.frequency != posting.positions.size()) {
-                return false;
+    auto all_terms = index_.keys();
+    for (const auto& term : all_terms) {
+        const auto* postings = index_.find(term);
+        if (postings) {
+            for (const auto& posting : *postings) {
+                if (posting.doc_id >= documents_.size()) {
+                    return false;
+                }
+                
+                if (posting.frequency != posting.positions.size()) {
+                    return false;
+                }
             }
         }
     }

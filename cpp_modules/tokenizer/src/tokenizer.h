@@ -1,9 +1,9 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
 
-#include "../../data_structures/string.h"
-#include "../../data_structures/vector.h"
-#include "../../data_structures/hash_table.h"
+#include "../../data_structures/ds_string.h"
+#include "../../data_structures/ds_vector.h"
+#include "../../data_structures/ds_hash_table.h"
 
 #include <cstddef>
 #include <utility>

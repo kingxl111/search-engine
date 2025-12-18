@@ -1,5 +1,5 @@
-#ifndef BIT_VECTOR_H
-#define BIT_VECTOR_H
+#ifndef DS_BIT_VECTOR_H
+#define DS_BIT_VECTOR_H
 
 #include <cstddef>
 #include <cstdint>
@@ -450,4 +450,4 @@ inline BitVector operator^(const BitVector& lhs, const BitVector& rhs) {
 
 } // namespace ds
 
-#endif // BIT_VECTOR_H
+#endif // DS_BIT_VECTOR_H

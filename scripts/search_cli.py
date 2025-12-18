@@ -22,18 +22,18 @@ from src.utils.mongodb_client import MongoDBClient
 class SearchCLI:
     """CLI для поисковой системы"""
     
-    def __init__(self, config_path: str = None):
+    def __init__(self, config_path: str = "config.yaml"):
         """Инициализация CLI"""
         # Загружаем конфигурацию
         if config_path is None:
             config_path = Path(__file__).parent.parent / "config.yaml"
         
-        self.config = ConfigLoader.load(str(config_path))
+        self.config = ConfigLoader.load_config(str(config_path))
         self.logger = setup_logger("search_cli", self.config)
         
         # Подключаемся к MongoDB
         try:
-            self.db_client = MongoDBClient(self.config)
+            self.db_client = MongoDBClient(config_path)
             self.pages_collection = self.db_client.get_collection(
                 self.config['mongodb']['collections']['pages']
             )

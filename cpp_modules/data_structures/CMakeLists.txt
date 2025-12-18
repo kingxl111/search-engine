@@ -5,11 +5,11 @@ project(data_structures LANGUAGES CXX)
 
 # Заголовочные файлы
 set(HEADERS
-    vector.h
-    string.h
-    hash_table.h
-    avl_tree.h
-    bit_vector.h
+    ds_vector.h
+    ds_string.h
+    ds_hash_table.h
+    ds_avl_tree.h
+    ds_bit_vector.h
 )
 
 # Создаем header-only библиотеку

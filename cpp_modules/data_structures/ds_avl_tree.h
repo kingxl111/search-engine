@@ -1,5 +1,5 @@
-#ifndef AVL_TREE_H
-#define AVL_TREE_H
+#ifndef DS_AVL_TREE_H
+#define DS_AVL_TREE_H
 
 #include <utility>
 #include <functional>
@@ -401,4 +401,4 @@ private:
 
 } // namespace ds
 
-#endif // AVL_TREE_H
+#endif // DS_AVL_TREE_H

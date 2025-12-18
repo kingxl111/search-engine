@@ -22,7 +22,7 @@ def test_config():
     
     try:
         config_path = Path(__file__).parent.parent / "config.yaml"
-        config = ConfigLoader.load(str(config_path))
+        config = ConfigLoader.load_config(str(config_path))
         
         print(f"✅ Configuration loaded successfully")
         print(f"   App name: {config['app']['name']}")
@@ -42,7 +42,8 @@ def test_mongodb_connection(config):
     print("=" * 80)
     
     try:
-        db_client = MongoDBClient(config)
+        config_path = Path(__file__).parent.parent / "config.yaml"
+        db_client = MongoDBClient(str(config_path))
         
         # Проверяем подключение
         db_client.client.admin.command('ping')
@@ -74,9 +75,8 @@ def test_search(db_client, config):
     print("=" * 80)
     
     try:
-        pages_collection = db_client.get_collection(
-            config['mongodb']['collections']['pages']
-        )
+        # db_client уже подключен, просто получаем коллекцию
+        pages_collection = db_client.db[config['mongodb']['collections']['pages']]
         
         # Проверяем, есть ли документы
         count = pages_collection.count_documents({})
