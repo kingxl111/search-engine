@@ -8,11 +8,6 @@ set(SOURCES
     src/query_parser.cpp
     src/query_evaluator.cpp
     src/boolean_search.cpp
-    ../data_structures/vector.cpp
-    ../data_structures/string.cpp
-    ../data_structures/hash_table.cpp
-    ../data_structures/avl_tree.cpp
-    ../data_structures/bit_vector.cpp
     ../tokenizer/src/tokenizer.cpp
     ../boolean_index/src/inverted_index.cpp
     ../boolean_index/src/index_builder.cpp
@@ -23,11 +18,6 @@ set(HEADERS
     src/query_parser.h
     src/query_evaluator.h
     src/boolean_search.h
-    ../data_structures/vector.h
-    ../data_structures/string.h
-    ../data_structures/hash_table.h
-    ../data_structures/avl_tree.h
-    ../data_structures/bit_vector.h
     ../tokenizer/src/tokenizer.h
     ../boolean_index/src/inverted_index.h
     ../boolean_index/src/index_builder.h
@@ -37,9 +27,9 @@ set(HEADERS
 add_library(boolean_search ${SOURCES} ${HEADERS})
 
 # Настройки компилятора
-target_include_directories(boolean_search PRIVATE 
+target_include_directories(boolean_search PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../data_structures
+    ${CMAKE_CURRENT_SOURCE_DIR}/../data_stuctures
     ${CMAKE_CURRENT_SOURCE_DIR}/../tokenizer/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../boolean_index/src
 )

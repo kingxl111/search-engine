@@ -7,11 +7,6 @@ project(boolean_index LANGUAGES CXX)
 set(SOURCES
     src/inverted_index.cpp
     src/index_builder.cpp
-    ../data_structures/vector.cpp
-    ../data_structures/string.cpp
-    ../data_structures/hash_table.cpp
-    ../data_structures/avl_tree.cpp
-    ../data_structures/bit_vector.cpp
     ../tokenizer/src/tokenizer.cpp
 )
 
@@ -19,11 +14,6 @@ set(SOURCES
 set(HEADERS
     src/inverted_index.h
     src/index_builder.h
-    ../data_structures/vector.h
-    ../data_structures/string.h
-    ../data_structures/hash_table.h
-    ../data_structures/avl_tree.h
-    ../data_structures/bit_vector.h
     ../tokenizer/src/tokenizer.h
 )
 
@@ -31,9 +21,9 @@ set(HEADERS
 add_library(boolean_index ${SOURCES} ${HEADERS})
 
 # Настройки компилятора
-target_include_directories(boolean_index PRIVATE 
+target_include_directories(boolean_index PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../data_structures
+    ${CMAKE_CURRENT_SOURCE_DIR}/../data_stuctures
     ${CMAKE_CURRENT_SOURCE_DIR}/../tokenizer/src
 )
 

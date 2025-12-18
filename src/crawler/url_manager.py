@@ -35,7 +35,6 @@ class URLManager:
             'total_discovered': 0,
             'total_visited': 0,
             'total_skipped': 0,
-            'start_time': datetime.now()
         }
         
         # Максимальная глубина
@@ -184,8 +183,8 @@ class URLManager:
         stats['pending_count'] = len(self.pending_urls)
         
         # Вычисляем время работы
-        elapsed = datetime.now() - stats['start_time']
-        stats['elapsed_time'] = str(elapsed)
+        # elapsed = datetime.now() - stats['start_time']
+        # stats['elapsed_time'] = str(elapsed)
         
         return stats
     

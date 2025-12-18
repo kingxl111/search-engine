@@ -1,16 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
-# Проект структур данных
+# Проект структур данных (header-only)
 project(data_structures LANGUAGES CXX)
-
-# Исходные файлы
-set(SOURCES
-    vector.cpp
-    string.cpp
-    hash_table.cpp
-    avl_tree.cpp
-    bit_vector.cpp
-)
 
 # Заголовочные файлы
 set(HEADERS
@@ -21,38 +12,22 @@ set(HEADERS
     bit_vector.h
 )
 
-# Создаем библиотеку
-add_library(data_structures ${SOURCES} ${HEADERS})
+# Создаем header-only библиотеку
+add_library(data_structures INTERFACE)
 
 # Настройки компилятора
-target_include_directories(data_structures PUBLIC 
+target_include_directories(data_structures INTERFACE 
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# Флаги компиляции
-target_compile_features(data_structures PUBLIC cxx_std_17)
-
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(data_structures PUBLIC 
-        -Wall -Wextra -Wpedantic -O2
-    )
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    target_compile_options(data_structures PUBLIC 
-        -Wall -Wextra -Wpedantic -O2
-    )
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_options(data_structures PUBLIC 
-        /W4 /O2
-    )
-endif()
+# Требуем C++17
+target_compile_features(data_structures INTERFACE cxx_std_17)
 
 # Устанавливаем
 install(TARGETS data_structures
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
+    EXPORT data_structures-targets
 )
 
 install(FILES ${HEADERS}
-    DESTINATION include
+    DESTINATION include/data_structures
 )

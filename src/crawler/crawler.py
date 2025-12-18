@@ -10,6 +10,8 @@ from datetime import datetime
 from urllib.parse import urlparse
 import requests
 
+from src.utils.logger import logger
+
 from .url_manager import URLManager
 from .page_downloader import PageDownloader
 from .robots_parser import RobotsParser
@@ -344,6 +346,7 @@ class WikipediaCrawler:
             
             # Получаем следующий URL
             url_info = self.url_manager.get_next_url()
+            logger.info(str(url_info))
             if not url_info:
                 break
             

@@ -6,24 +6,20 @@ project(stemmer LANGUAGES CXX)
 # Исходные файлы
 set(SOURCES
     src/stemmer.cpp
-    ../data_structures/vector.cpp
-    ../data_structures/string.cpp
 )
 
 # Заголовочные файлы
 set(HEADERS
     src/stemmer.h
-    ../data_structures/vector.h
-    ../data_structures/string.h
 )
 
 # Создаем библиотеку
 add_library(stemmer ${SOURCES} ${HEADERS})
 
 # Настройки компилятора
-target_include_directories(stemmer PRIVATE 
+target_include_directories(stemmer PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../data_structures
+    ${CMAKE_CURRENT_SOURCE_DIR}/../data_stuctures
 )
 
 # Флаги компиляции

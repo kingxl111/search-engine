@@ -6,30 +6,20 @@ project(tokenizer LANGUAGES CXX)
 # Исходные файлы
 set(SOURCES
     src/tokenizer.cpp
-    ../data_structures/vector.cpp
-    ../data_structures/string.cpp
-    ../data_structures/hash_table.cpp
-    ../data_structures/avl_tree.cpp
-    ../data_structures/bit_vector.cpp
 )
 
 # Заголовочные файлы
 set(HEADERS
     src/tokenizer.h
-    ../data_structures/vector.h
-    ../data_structures/string.h
-    ../data_structures/hash_table.h
-    ../data_structures/avl_tree.h
-    ../data_structures/bit_vector.h
 )
 
 # Создаем библиотеку
 add_library(tokenizer ${SOURCES} ${HEADERS})
 
 # Настройки компилятора
-target_include_directories(tokenizer PRIVATE 
+target_include_directories(tokenizer PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../data_structures
+    ${CMAKE_CURRENT_SOURCE_DIR}/../data_stuctures
 )
 
 # Флаги компиляции

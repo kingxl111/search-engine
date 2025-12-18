@@ -6,6 +6,7 @@ import os
 import yaml
 from typing import Dict, Any
 from pathlib import Path
+from dotenv import load_dotenv
 
 
 class ConfigLoader:
@@ -22,6 +23,16 @@ class ConfigLoader:
         Returns:
             Словарь с конфигурацией
         """
+        # Загружаем переменные окружения из .env файла
+        env_path = Path(__file__).parent.parent.parent / '.env'
+        if env_path.exists():
+            load_dotenv(dotenv_path=env_path)
+            print(f"Загружены переменные из {env_path}")
+        else:
+            # Пробуем загрузить из текущей директории
+            load_dotenv()
+            print(" .env файл не найден, используются системные переменные")
+        
         config_path = Path(config_path)
         
         if not config_path.exists():
@@ -61,11 +72,25 @@ class ConfigLoader:
                 # Получаем значение из переменных окружения
                 env_value = os.environ.get(var_name)
                 if env_value is not None:
+                    print(f"  ↳ Заменяем ${var_name} = '{env_value}'")
                     return env_value
                 elif default_value is not None:
+                    print(f"  ↳ ${var_name} не задана, используем значение по умолчанию: '{default_value}'")
                     return default_value
                 else:
-                    raise ValueError(f"Environment variable {var_name} not set and no default provided")
+                    # Если переменная обязательна, создаем ее из .env.example
+                    example_file = Path('.env.example')
+                    if example_file.exists():
+                        with open(example_file, 'r') as f:
+                            for line in f:
+                                if line.startswith(var_name + '='):
+                                    example_value = line.split('=', 1)[1].strip()
+                                    os.environ[var_name] = example_value
+                                    print(f"  ⚠️  ${var_name} взята из .env.example: '{example_value}'")
+                                    return example_value
+                    
+                    raise ValueError(f"Environment variable {var_name} not set and no default provided. "
+                                   f"Please check your .env file")
         return config
     
     @staticmethod
@@ -109,8 +134,8 @@ class ConfigLoader:
         """
         mongodb_config = config.get('mongodb', {})
         
-        username = mongodb_config.get('username', '')
-        password = mongodb_config.get('password', '')
+        username = mongodb_config.get('username', 'admin')
+        password = mongodb_config.get('password', 'admin')
         host = mongodb_config.get('host', 'localhost')
         port = mongodb_config.get('port', 27017)
         database = mongodb_config.get('database', 'search_engine_db')

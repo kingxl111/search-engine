@@ -29,7 +29,8 @@ class PageDownloader:
         # Настройки из конфигурации
         crawler_config = config.get('crawler', {})
         self.user_agent = crawler_config.get('user_agent', 'SearchEngineBot/1.0')
-        self.timeout = crawler_config.get('timeout', 10)
+        # self.timeout = crawler_config.get('timeout', 10)
+        self.timeout = 10
         self.retry_attempts = crawler_config.get('retry_attempts', 3)
         self.min_delay = crawler_config.get('delay', 1.0) * 0.8
         self.max_delay = crawler_config.get('delay', 1.0) * 1.2

@@ -14,8 +14,8 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang
     endif()
 endif()
 
-# Включаем поддиректории
-add_subdirectory(data_structures)
+# Включаем поддиректории (note: data_stuctures is the actual directory name)
+add_subdirectory(data_stuctures)
 add_subdirectory(tokenizer)
 add_subdirectory(stemmer)
 add_subdirectory(boolean_index)
