@@ -96,6 +96,9 @@ class URLManager:
         
         url, depth = self.url_queue.popleft()
         
+        # Приводим depth к int (может прийти как строка из JSON)
+        depth = int(depth)
+        
         # Помечаем как обрабатываемый
         self.pending_urls.remove(url)
         self.visited_urls.add(url)
@@ -117,6 +120,9 @@ class URLManager:
             Количество добавленных URL
         """
         added_count = 0
+        
+        # Приводим depth к int (может прийти как строка из JSON)
+        current_depth = int(current_depth)
         
         if current_depth >= self.max_depth:
             return added_count

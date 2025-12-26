@@ -12,6 +12,8 @@ from bs4 import BeautifulSoup
 import re
 import chardet
 
+from .source_parsers import SourceParserManager
+
 
 class PageDownloader:
     """Класс для загрузки и обработки веб-страниц"""
@@ -47,6 +49,9 @@ class PageDownloader:
         
         # Время последнего запроса для каждого домена
         self.last_request_time = {}
+        
+        # Менеджер специализированных парсеров
+        self.parser_manager = SourceParserManager()
     
     def download_page(self, url: str, robots_parser=None) -> Optional[Dict]:
         """
@@ -116,10 +121,14 @@ class PageDownloader:
         current_time = time.time()
         last_time = self.last_request_time.get(domain, 0)
         
+        # Получаем рекомендуемую задержку для данного источника
+        recommended_delay = self.parser_manager.get_delay_for_url(url)
+        min_delay = max(self.min_delay, recommended_delay * 0.8)
+        
         # Вычисляем необходимую задержку
         elapsed = current_time - last_time
-        if elapsed < self.min_delay:
-            sleep_time = self.min_delay - elapsed + random.uniform(0, 0.1)
+        if elapsed < min_delay:
+            sleep_time = min_delay - elapsed + random.uniform(0, 0.2)
             time.sleep(sleep_time)
         
         # Обновляем время последнего запроса
@@ -150,33 +159,48 @@ class PageDownloader:
         # Парсим HTML
         soup = BeautifulSoup(html_text, 'lxml')
         
-        # Извлекаем заголовок
-        title = self._extract_title(soup)
+        # Получаем специализированный парсер для данного URL
+        parser = self.parser_manager.get_parser(url)
         
-        # Извлекаем основной текст
-        text = self._extract_text(soup)
-        
-        # Извлекаем метаданные
-        metadata = self._extract_metadata(soup)
-        
-        # Извлекаем ссылки
-        links = self._extract_links(soup, url)
-        
-        # Собираем данные страницы
-        page_data = {
-            'url': url,
-            'title': title,
-            'content': text,
-            'html_content': html_text,
-            'metadata': metadata,
-            'links': links,
-            'encoding': encoding,
-            'content_type': response.headers.get('Content-Type', ''),
-            'content_length': len(html_content),
-            'download_time': time.time(),
-            'status_code': response.status_code,
-            'headers': dict(response.headers)
-        }
+        try:
+            # Используем специализированный парсер
+            page_data = parser.parse(url, html_text, soup)
+            
+            # Добавляем системные поля
+            page_data.update({
+                'html_content': html_text,
+                'encoding': encoding,
+                'content_type': response.headers.get('Content-Type', ''),
+                'content_length': len(html_content),
+                'download_time': time.time(),
+                'status_code': response.status_code,
+                'headers': dict(response.headers)
+            })
+            
+        except Exception as e:
+            self.logger.warning(f"Specialized parser failed for {url}, using fallback: {e}")
+            # Fallback на базовый парсинг
+            title = self._extract_title(soup)
+            text = self._extract_text(soup)
+            metadata = self._extract_metadata(soup)
+            links = self._extract_links(soup, url)
+            
+            page_data = {
+                'url': url,
+                'title': title,
+                'content': text,
+                'html_content': html_text,
+                'metadata': metadata,
+                'links': links,
+                'encoding': encoding,
+                'content_type': response.headers.get('Content-Type', ''),
+                'content_length': len(html_content),
+                'download_time': time.time(),
+                'status_code': response.status_code,
+                'headers': dict(response.headers),
+                'source': 'fallback',
+                'language': 'unknown'
+            }
         
         return page_data
     
