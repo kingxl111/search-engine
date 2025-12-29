@@ -10,9 +10,3 @@
 - 4 ГБ оперативной памяти
 - 10 ГБ свободного места на диске
 
-## Установка и запуск
-
-### 1. Клонирование репозитория
-```bash
-git clone https://github.com/yourusername/search-engine.git
-cd search-engine
